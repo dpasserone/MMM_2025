@@ -1,0 +1,34 @@
+# Initialisation
+
+units metal
+atom_style molecular
+boundary p p p
+pair_style eam
+read_data cnt_cu.data
+pair_coeff * * Cu_u3.eam
+
+change_box all x final -71.4286 71.4286 y final -71.4286 71.4286 z final -142.8572 142.8572
+
+group copper_atoms type 1
+variable copper_xcm equal -1*xcm(copper_atoms,x)
+variable copper_ycm equal -1*xcm(copper_atoms,y)
+variable copper_zcm equal -1*xcm(copper_atoms,z)
+displace_atoms copper_atoms move ${copper_xcm} ${copper_ycm} ${copper_zcm}
+
+variable zmax equal bound(copper_atoms,zmax)+2.5
+variable zmin equal bound(copper_atoms,zmin)-2.5
+
+
+fix mynve all nve
+compute Tmid  all temp
+fix myber all temp/berendsen 1 200 0.1
+fix_modify myber temp Tmid
+
+dump mydmp all atom 100 dumpCu.lammpstrj
+
+thermo 100
+thermo_modify temp Tmid
+
+timestep 0.0005
+
+run 30000
