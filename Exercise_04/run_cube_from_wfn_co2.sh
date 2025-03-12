@@ -4,8 +4,7 @@ DIR="./"
 
 mkdir cubes
 
-/home/jovyan/soft/cp2k-spm-tools/cube_from_wfn.py \
-  --cp2k_input_file $DIR/aiida.inp \
+/home/jovyan/.local/bin/cp2k-cube-from-wfn  --cp2k_input_file $DIR/aiida.inp \
   --basis_set_file BASIS_MOLOPT \
   --xyz_file $DIR/aiida.coords.xyz \
   --wfn_file $DIR/aiida-RESTART.wfn \
