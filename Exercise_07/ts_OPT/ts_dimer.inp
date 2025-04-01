@@ -1,0 +1,147 @@
+&GLOBAL
+  ELPA_KERNEL SSE_BLOCK4
+  PROJECT ts
+  RUN_TYPE GEO_OPT
+  PRINT_LEVEL LOW
+&END GLOBAL
+
+&MOTION
+  &GEO_OPT
+    TYPE TRANSITION_STATE
+    MAX_ITER 200
+    OPTIMIZER CG
+    &CG
+      MAX_STEEP_STEPS 20
+      &LINE_SEARCH
+        TYPE 2PNT
+      &END LINE_SEARCH
+    &END CG
+
+    RMS_FORCE 5.E-3
+    RMS_DR 2.E-2
+    MAX_DR 2.E-2
+    MAX_FORCE 10.E-3
+    &TRANSITION_STATE
+      METHOD DIMER
+      &DIMER
+        DR 0.01
+        ANGLE_TOLERANCE [deg] 0.5
+        INTERPOLATE_GRADIENT
+        &ROT_OPT
+          OPTIMIZER CG
+          MAX_ITER 20
+          &CG
+            MAX_STEEP_STEPS 20
+            &LINE_SEARCH
+              TYPE 2PNT
+            &END
+          &END
+        &END
+      &END
+    &END
+ &END GEO_OPT
+     &PRINT
+      &RESTART
+        &EACH
+          GEO_OPT 10            
+        &END
+        ADD_LAST NUMERIC
+      &END
+     &END
+    
+&END MOTION
+
+&FORCE_EVAL
+ METHOD QS
+ &DFT
+ BASIS_SET_FILE_NAME BASIS_MOLOPT     
+ POTENTIAL_FILE_NAME GTH_POTENTIALS  
+! &PRINT
+!   &MO_CUBES          
+!    ADD_LAST NUMERIC
+!    NHOMO 1
+!    NLUMO 1
+!   &END MO_CUBES
+! &END PRINT
+ &MGRID
+    CUTOFF 400
+ &END MGRID
+ CHARGE 0
+ &POISSON
+   PERIODIC XYZ
+   PSOLVER  PERIODIC
+ &END POISSON
+ &QS
+   METHOD GAPW                       !use gaussians and plane waves
+ &END QS
+    &SCF
+      &OT
+        PRECONDITIONER FULL_SINGLE_INVERSE
+        MINIMIZER DIIS
+        N_DIIS 7
+      &END
+      SCF_GUESS RESTART
+      EPS_SCF 1.0E-6
+      MAX_SCF 50
+       &OUTER_SCF
+          EPS_SCF 1.0E-6
+          MAX_SCF 500
+       &END
+    &END SCF
+ &XC
+   &XC_FUNCTIONAL PBE                !second order of DFT
+   &END XC_FUNCTIONAL
+        &VDW_POTENTIAL
+            DISPERSION_FUNCTIONAL PAIR_POTENTIAL
+            &PAIR_POTENTIAL
+               CALCULATE_C9_TERM .TRUE.
+               PARAMETER_FILE_NAME dftd3.dat
+               REFERENCE_FUNCTIONAL PBE
+               R_CUTOFF 15
+               TYPE DFTD3
+            &END PAIR_POTENTIAL
+         &END VDW_POTENTIAL
+ &END XC
+ &END DFT
+ &PRINT
+  &FORCES off
+  &END FORCES
+  &GRID_INFORMATION
+  &END GRID_INFORMATION
+  &PROGRAM_RUN_INFO
+   &EACH
+    GEO_OPT 1
+   &END EACH
+  &END PROGRAM_RUN_INFO
+ &END PRINT
+
+ &SUBSYS
+   &CELL                         
+     PERIODIC XYZ
+     ABC 10 10 10               
+   &END CELL
+   &TOPOLOGY
+        COORDINATE  xyz
+        COORD_FILE_NAME  ts.xyz
+       &CENTER_COORDINATES
+       &END
+   &END TOPOLOGY
+   &KIND H
+      BASIS_SET TZV2P-MOLOPT-GTH
+      POTENTIAL GTH-PBE-q1
+   &END KIND
+   &KIND C
+      BASIS_SET TZV2P-MOLOPT-GTH
+      POTENTIAL GTH-PBE-q4
+   &END KIND
+   &KIND O
+      BASIS_SET TZV2P-MOLOPT-GTH
+      POTENTIAL GTH-PBE-q6
+   &END KIND
+   &END SUBSYS
+&END FORCE_EVAL
+ 
+!&EXT_RESTART
+!RESTART_FILE_NAME ts-1.restart
+!&END
+ 
