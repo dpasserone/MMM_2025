@@ -1,0 +1,18 @@
+
+units metal
+atom_style atomic
+boundary p p p
+
+read_data argon.data  # Load atomic structure from ASE
+
+
+mass 1 39.948
+pair_style lj/cut 8.5
+pair_coeff * * 0.01042 3.405  8.5 # Lennard-Jones parameters for Argon interactions
+
+velocity all create 300.0 12345  # Assign initial velocities at 300K
+compute myPE all pe
+thermo 100  # Print thermodynamic info every 100 steps
+thermo_style custom step temp pe ke etotal  # Customize output format
+
+run 100
