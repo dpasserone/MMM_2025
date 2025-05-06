@@ -1,0 +1,8 @@
+append_text: ''
+computer: localhost
+default_calc_job_plugin: core.shell
+description: ''
+filepath_executable: /home/jovyan/MyExercises/Exercise_11/my_code.py
+label: my_code
+prepend_text: ''
+use_double_quotes: 'False'
