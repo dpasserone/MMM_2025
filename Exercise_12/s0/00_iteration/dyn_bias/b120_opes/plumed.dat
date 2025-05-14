@@ -1,0 +1,16 @@
+UNITS LENGTH=A                                                                                                                                                                                              
+d_nd_h: DISTANCE ATOMS=5,6  
+d_na_h: DISTANCE ATOMS=12,6 
+
+cv: CUSTOM ARG=d_nd_h,d_na_h FUNC=y-x PERIODIC=NO 
+
+opes: OPES_METAD ... 
+   ARG=cv.*
+   PACE=500 
+   STATE_WFILE=STATE
+   STATE_WSTRIDE=500
+   BARRIER=120
+   TEMP=300
+...
+
+PRINT ARG=* FILE=COLVAR STRIDE=40

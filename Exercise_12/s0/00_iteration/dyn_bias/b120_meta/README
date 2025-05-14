@@ -1,0 +1,1 @@
+To restart from scratch, rm dump.xyz COLVAR HILLS bck* log.lammps output.plumed model_devi*

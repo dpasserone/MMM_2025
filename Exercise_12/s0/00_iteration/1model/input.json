@@ -1,0 +1,59 @@
+{
+    "_comment": " model parameters",
+    "model": {
+	"type_map":	["C", "H", "N"],
+	"descriptor" :{
+	    "type":		"se_e2_a",
+	    "rcut_smth":	1.00,
+	    "rcut":		6.0,
+	    "neuron":		[30, 60, 120],
+	    "resnet_dt":	false,
+	    "axis_neuron":	12,
+	    "seed":		1,
+	    "_comment":		" that's all"
+	},
+	"fitting_net" : {
+	    "neuron":		[240, 240,240],
+	    "resnet_dt":	true,
+	    "seed":		1,
+	    "_comment":		" that's all"
+	},
+	"_comment":	" that's all"
+    },
+
+    "learning_rate" :{
+	"type":		"exp",
+	"decay_steps":	4000,
+	"start_lr":	0.001,	
+	"stop_lr":	3.51e-8,
+	"_comment":	"that's all"
+    },
+
+    "loss" :{
+	"type":		"ener",
+	"start_pref_e":	0.02,
+	"limit_pref_e":	1,
+	"start_pref_f":	1000,
+	"limit_pref_f":	1,
+	"start_pref_v":	0,
+	"limit_pref_v":	0,
+	"_comment":	" that's all"
+    },
+
+    "training" : {
+	"training_data": {
+	    "systems":		"/home/jovyan/data_s0/s0_iteration_0/",
+	    "batch_size":	8,
+	    "_comment":		"that's all"
+	},
+	"numb_steps":	400000,
+	"seed":		10,
+	"disp_file":	"lcurve.out",
+	"disp_freq":	100,
+	"save_freq":	1000,
+	"_comment":	"that's all"
+    },    
+
+    "_comment":		"that's all"
+}
+

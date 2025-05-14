@@ -1,0 +1,20 @@
+UNITS LENGTH=A                                                                                                                                                                                              
+d_nd_h: DISTANCE ATOMS=5,6  
+d_na_h: DISTANCE ATOMS=12,6 
+
+cv: CUSTOM ARG=d_nd_h,d_na_h FUNC=y-x PERIODIC=NO 
+
+metad: METAD ...
+   ARG=cv.*
+   TEMP=300 
+   PACE=20 
+   HEIGHT=10
+   SIGMA=0.185815 
+   BIASFACTOR=10 
+   GRID_MIN=-5
+   GRID_MAX=5
+   GRID_BIN=200 
+   CALC_RCT 
+...
+
+PRINT ARG=* FILE=COLVAR STRIDE=40

@@ -1,0 +1,50 @@
+variable        NSTEPS1         equal 20000000
+variable        DUMP_FREQ       equal 40
+variable        TEMP            equal 300
+variable	SEED1           equal 41939 
+variable	SEED2           equal 21934 
+variable        TAU_T           equal 0.05
+variable        TAU_P           equal 0.25
+
+units           metal
+boundary        p p p
+
+restart 100000 lmp.restart
+atom_style      atomic
+neigh_modify    delay 10 every 1
+
+#read_restart    RESTART
+read_data       geom.lmp
+mass    1       12.011
+mass    2       1.00784
+mass    3       14.0067
+
+
+
+#pair_style deepmd ../../1model/frozen_model.pb ../../2model/frozen_model.pb ../../3model/frozen_model.pb ../../4model/frozen_model.pb out_freq ${DUMP_FREQ} out_file model_devi.out
+pair_style deepmd ../../1model/frozen_model.pb ../../2model/frozen_model.pb ../../3model/frozen_model.pb ../../4model/frozen_model.pb out_freq ${DUMP_FREQ} out_file model_devi.out
+pair_coeff * *
+
+# TIMESTEP
+timestep	0.00025  #ps 
+thermo          ${DUMP_FREQ}
+thermo_style    custom step temp pe ke etotal density press vol lx ly lz xy xz yz
+thermo_modify 	flush yes
+
+# DUMP
+dump            myDump all xyz ${DUMP_FREQ} dump.xyz
+dump_modify     myDump append yes element C H N
+
+# run- NVT
+velocity        all create ${TEMP} ${SEED2} dist gaussian
+fix             dpgen_plm all plumed plumedfile plumed.dat  outfile output.plumed
+fix             2 all nve
+fix             3 all temp/csvr ${TEMP} ${TEMP} ${TAU_T} ${SEED2}
+run             ${NSTEPS1}
+
+
+
+
+
+
+

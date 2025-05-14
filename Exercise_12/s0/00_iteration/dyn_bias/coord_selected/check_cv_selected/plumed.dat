@@ -1,0 +1,9 @@
+UNITS LENGTH=A
+d_nd_h: DISTANCE ATOMS=5,6 
+d_na_h: DISTANCE ATOMS=12,6 	
+d_nn:   DISTANCE ATOMS=5,12
+
+cv: CUSTOM ARG=d_nd_h,d_na_h,d_nn FUNC=y-x PERIODIC=NO 
+
+PRINT ARG=cv,d_nd_h,d_na_h,d_nn FILE=COLVAR
+
